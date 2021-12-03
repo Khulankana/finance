@@ -21,6 +21,28 @@ var uiController = (function () {
     getDOMstrings: function () {
       return DOMstrings;
     },
+
+    addListItem: function (item, type) {
+      //Orlogiin zarlagiin elemntiig aguulsan html-g beltgene
+      var html, list;
+      if (type === "inc") {
+        list = ".income__list";
+        html =
+          '<div class="item clearfix" id="income-%id%"><div class="item__description">%desc%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      } else {
+        list = ".expenses__list";
+        html =
+          '<div class="item clearfix" id="expense-%id%"><div class="item__description">%desc%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      }
+
+      //Ter Html dotroo utguudiig nireplace ashiglaj uurhcilj ugnu
+      html = html.replace("%id%", item.id);
+      html = html.replace("%desc%", item.desc);
+      html = html.replace("%value%", item.value);
+
+      // beltgesn html-ee domruu hiij ugnu
+      document.querySelector(list).insertAdjacentHTML("beforeend", html);
+    },
   };
 })();
 
@@ -69,6 +91,8 @@ var financeController = (function () {
       }
 
       data.items[type].push(item);
+
+      return item;
     },
 
     seeData: function () {
@@ -84,8 +108,11 @@ var appController = (function (uiController, financeController) {
     var input = uiController.getInput();
 
     // 2. Olj avsan ugudluudee canhuugiin controllert damjuulj tend hadgalna
-    financeController.addItem(input.type, input.desc, input.value);
+    var item = financeController.addItem(input.type, input.desc, input.value);
+
     // 3. Olj avsan ugugdluudee web deeree tohiroh hesegt gargana
+    uiController.addListItem(item, input.type);
+
     // 4. Tusviig tootsoolno
     // 5. Etssiin uldegdliig tootsoj gargana
   };
