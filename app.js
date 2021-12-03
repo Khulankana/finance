@@ -8,6 +8,10 @@ var uiController = (function () {
     addBtn: ".add__btn",
     incomeList: ".income__list",
     expenseList: ".expenses__list",
+    tosovLabel: ".budget__value",
+    incomeLabel: ".budget__income--value",
+    expenseLabel: ".budget__expenses--value",
+    percentageLabel: ".budget__expenses--percentage",
   };
 
   // public -return hiigdej bgaa uchir
@@ -66,6 +70,18 @@ var uiController = (function () {
 
       // beltgesn html-ee domruu hiij ugnu
       document.querySelector(list).insertAdjacentHTML("beforeend", html);
+    },
+
+    tosviigUzuuleh: function (tosov) {
+      document.querySelector(DOMstrings.tosovLabel).textContent = tosov.tosov;
+      document.querySelector(DOMstrings.incomeLabel).textContent = tosov.inc;
+      document.querySelector(DOMstrings.expenseLabel).textContent = tosov.exp;
+      if (tosov.huvi === 0) {
+        document.querySelector(DOMstrings.percentageLabel).textContent = "";
+      } else {
+        document.querySelector(DOMstrings.percentageLabel).textContent =
+          tosov.huvi + "%";
+      }
     },
   };
 })();
@@ -184,6 +200,7 @@ var appController = (function (uiController, financeController) {
       var tosov = financeController.tosovAvah();
 
       // 6. Tootsoog delgetsend gargana
+      uiController.tosviigUzuuleh(tosov);
       console.log(tosov);
     }
   };
@@ -209,6 +226,12 @@ var appController = (function (uiController, financeController) {
   return {
     init: function () {
       console.log(" Programm started .....");
+      uiController.tosviigUzuuleh({
+        tosov: 0,
+        huvi: 0,
+        inc: 0,
+        exp: 0,
+      });
       setupListeners();
     },
   };
